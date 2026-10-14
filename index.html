@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Spasial Interaktif Kampus UNIBA Madura</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/img/logo_uniba.png">
+
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Backdrop untuk Mobile Sidebar -->
+    <div id="sidebar-backdrop" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-none" style="z-index: 1015;"></div>
+
+    <!-- ===================================================================
+         1. HEADER UTAMA (KONSISTEN DI SELURUH HALAMAN)
+         =================================================================== -->
+    <header class="uniba-header">
+        <!-- Tombol Hamburger Mobile -->
+        <button class="btn btn-outline-secondary d-md-none me-2" id="mobile-sidebar-toggle" aria-label="Toggle Navigation">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+
+        <!-- Brand / Logo UNIBA MADURA -->
+        <a href="#home" class="header-brand" onclick="App.navigateTo('home')">
+            <img src="assets/img/logo_uniba.png" alt="Logo Resmi UNIBA Madura">
+            <div class="brand-text">
+                <h1>UNIBA MADURA</h1>
+                <span>Universitas Bahaudin Mudhary Madura</span>
+            </div>
+        </a>
+
+        <!-- Global Search Bar -->
+        <div class="header-search-container d-none d-md-block">
+            <i class="bi bi-search header-search-icon"></i>
+            <input type="text" id="global-header-search" class="header-search-input" placeholder="Cari gedung, ruangan, atau fasilitas... (Tekan Enter)">
+        </div>
+
+        <!-- Action Icons (Notifikasi & Profil / Admin) -->
+        <div class="header-actions">
+            <!-- Dropdown Notifikasi -->
+            <div class="dropdown">
+                <button class="btn-header-action" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Pemberitahuan Kampus">
+                    <i class="bi bi-bell"></i>
+                    <span class="notification-badge"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 p-3" style="width: 320px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                        <h6 class="fw-bold mb-0">Pemberitahuan</h6>
+                        <span class="badge bg-success-subtle text-success">Baru</span>
+                    </div>
+                    <div class="d-flex gap-2 py-2 border-bottom">
+                        <i class="bi bi-info-circle text-primary mt-1"></i>
+                        <div>
+                            <p class="small fw-semibold mb-0">Sistem Pemetaan Spasial Aktif</p>
+                            <span class="text-muted" style="font-size: 0.72rem;">Selamat datang di Sistem Informasi Spasial UNIBA.</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 py-2">
+                        <i class="bi bi-tools text-warning mt-1"></i>
+                        <div>
+                            <p class="small fw-semibold mb-0">Jadwal Lab Komputer FST</p>
+                            <span class="text-muted" style="font-size: 0.72rem;">Pemeliharaan software Lab Komputer 1 pada Sabtu.</span>
+                        </div>
+                    </div>
+                    <div class="text-center pt-2">
+                        <a href="#berita" class="small text-success text-decoration-none fw-bold" onclick="App.navigateTo('berita')">Lihat Semua Pengumuman &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Navigasi Cepat Pencarian Mobile -->
+            <button class="btn-header-action d-md-none" onclick="App.navigateTo('search')" title="Pencarian">
+                <i class="bi bi-search"></i>
+            </button>
+
+            <!-- Profil / Login Admin -->
+            <a href="#admin-login" class="user-profile-btn" onclick="App.navigateTo('admin-login')">
+                <div class="user-avatar"><i class="bi bi-person"></i></div>
+                <span class="d-none d-lg-inline small fw-semibold">Civitas UNIBA</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ===================================================================
+         2. SIDEBAR NAVIGATION
+         =================================================================== -->
+    <aside class="uniba-sidebar" id="uniba-sidebar">
+        <div>
+            <!-- Brand Logo UNIBA Madura di Sidebar -->
+            <div class="sidebar-brand-box d-flex align-items-center gap-2 p-2 mb-3 bg-light rounded-3 border">
+                <img src="assets/img/logo_uniba.png" alt="Logo Resmi UNIBA Madura" style="width: 36px; height: 36px; object-fit: contain;">
+                <div style="line-height: 1.15;">
+                    <span class="d-block fw-bold text-dark small" style="letter-spacing: 0.3px;">UNIBA MADURA</span>
+                    <small class="text-muted" style="font-size: 0.70rem;">Sistem Informasi Spasial</small>
+                </div>
+            </div>
+
+            <div class="sidebar-label">Menu Navigasi</div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a class="sidebar-link active" data-view="home" onclick="App.navigateTo('home')">
+                        <i class="bi bi-house-door-fill"></i>
+                        <span>Beranda</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" data-view="map-kampus" onclick="App.navigateTo('map-kampus')">
+                        <i class="bi bi-map-fill"></i>
+                        <span>Peta Kampus</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" data-view="informasi-ruangan" onclick="App.navigateTo('informasi-ruangan')">
+                        <i class="bi bi-door-open-fill"></i>
+                        <span>Informasi Ruangan</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" data-view="fasilitas" onclick="App.navigateTo('fasilitas')">
+                        <i class="bi bi-building-check"></i>
+                        <span>Fasilitas</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" data-view="berita" onclick="App.navigateTo('berita')">
+                        <i class="bi bi-newspaper"></i>
+                        <span>Berita &amp; Pengumuman</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" data-view="search" onclick="App.navigateTo('search')">
+                        <i class="bi bi-search"></i>
+                        <span>Pencarian Ruangan</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Bagian Paling Bawah Sidebar: Login Admin -->
+        <div class="sidebar-footer">
+            <a href="#admin-login" class="sidebar-admin-link" onclick="App.navigateTo('admin-login')">
+                <i class="bi bi-shield-lock-fill text-success fs-5"></i>
+                <div class="flex-grow-1">
+                    <span class="d-block fw-bold" style="line-height: 1.1;">Login Admin</span>
+                    <small class="text-muted" style="font-size: 0.72rem;">Pengelolaan Data GIS</small>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ===================================================================
+         3. KONTEN UTAMA (SPA VIEW SECTIONS)
+         =================================================================== -->
+    <main class="uniba-main-content">
+
+        <!-- ===============================================================
+             VIEW 1: HALAMAN BERANDA / HOME
+             =============================================================== -->
+        <section id="view-home" class="view-section active-view">
+            <!-- Hero Section -->
+            <div class="hero-campus-banner" style="background-image: url('assets/img/campus_hero.jpg');">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="bi bi-geo-alt-fill text-warning"></i>
+                        Sistem Informasi Spasial Kampus
+                    </div>
+                    <h1 class="hero-title">Selamat Datang di<br>Universitas Bahaudin Mudhary Madura</h1>
+                    <p class="hero-subtitle">
+                        Jelajahi peta kampus untuk menemukan lokasi gedung, ruangan, dan fasilitas yang Anda butuhkan secara interaktif dan presisi.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <button class="btn btn-uniba-cta" onclick="App.navigateTo('map-kampus')">
+                            <i class="bi bi-compass-fill"></i>Jelajahi Peta Kampus
+                        </button>
+                        <button class="btn btn-outline-light rounded-3 px-4 py-2 fw-semibold" onclick="App.navigateTo('informasi-ruangan')">
+                            <i class="bi bi-door-open me-2"></i>Daftar Ruangan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fitur yang Tersedia (4 Cards Compact dalam 1 Baris Desktop) -->
+            <div class="mb-4 pb-2">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="text-success fw-bold text-uppercase small letter-spacing-1 d-block mb-1">Fitur Utama</span>
+                        <h2 class="h4 fw-bold text-dark mb-0">Fitur yang Tersedia</h2>
+                    </div>
+                    <span class="text-muted small d-none d-sm-inline">Kemudahan akses spasial kampus</span>
+                </div>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-xl-4">
+                    <!-- 1. Peta Kampus -->
+                    <div class="col">
+                        <div class="feature-card" onclick="App.navigateTo('map-kampus')">
+                            <div class="feature-icon-wrapper">
+                                <i class="bi bi-map-fill"></i>
+                            </div>
+                            <h3>Peta Kampus</h3>
+                            <p>Lihat peta seluruh area kampus, batas wilayah, serta orientasi gedung secara spasial.</p>
+                            <span class="feature-link">Buka Peta <i class="bi bi-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Informasi Ruangan -->
+                    <div class="col">
+                        <div class="feature-card" onclick="App.navigateTo('informasi-ruangan')">
+                            <div class="feature-icon-wrapper" style="background:#e0f2fe; color:#0284c7;">
+                                <i class="bi bi-door-open-fill"></i>
+                            </div>
+                            <h3>Informasi Ruangan</h3>
+                            <p>Detail ruangan, kapasitas, daftar fasilitas, hingga penanggung jawab setiap ruang.</p>
+                            <span class="feature-link" style="color:#0284c7;">Lihat Detail <i class="bi bi-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- 3. Pencarian -->
+                    <div class="col">
+                        <div class="feature-card" onclick="App.navigateTo('search')">
+                            <div class="feature-icon-wrapper" style="background:#fef3c7; color:#d97706;">
+                                <i class="bi bi-search"></i>
+                            </div>
+                            <h3>Pencarian</h3>
+                            <p>Cari gedung, ruangan, kode ruang, atau fasilitas dengan cepat dan visualisasi lokasi di peta.</p>
+                            <span class="feature-link" style="color:#d97706;">Mulai Cari <i class="bi bi-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- 4. Fasilitas Kampus -->
+                    <div class="col">
+                        <div class="feature-card" onclick="App.navigateTo('fasilitas')">
+                            <div class="feature-icon-wrapper" style="background:#ede9fe; color:#7c3aed;">
+                                <i class="bi bi-building-check"></i>
+                            </div>
+                            <h3>Fasilitas Kampus</h3>
+                            <p>Temukan fasilitas yang tersedia mulai dari perpustakaan, musholla, kantin, hingga fasilitas olahraga.</p>
+                            <span class="feature-link" style="color:#7c3aed;">Jelajahi <i class="bi bi-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tentang Sistem Informasi Spasial (Compact 2 Kolom, Gap min 32px, Padding 24px) -->
+            <div class="about-spasial-card mb-4 pb-2">
+                <div class="row gx-4 gx-lg-5 gy-4 align-items-center">
+                    <!-- Sebelah Kiri: 60-65% lebar -->
+                    <div class="col-12 col-lg-7">
+                        <div class="pe-lg-2">
+                            <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill mb-2 fw-semibold" style="font-size: 0.78rem;">Tentang Sistem Informasi Spasial</span>
+                            <h3 class="h4 fw-bold text-dark mb-2">Solusi Cerdas Penelusuran Gedung dan Ruangan UNIBA Madura</h3>
+                            <p class="text-muted small mb-3 leading-relaxed" style="line-height: 1.6;">
+                                Website ini digunakan untuk membantu mahasiswa, calon mahasiswa, dosen, tenaga kependidikan, dan pengunjung menemukan lokasi gedung, lantai, dan ruangan kampus secara lebih mudah melalui peta spasial interaktif berbasis web.
+                            </p>
+
+                            <!-- Statistik Kecil 4 Mini-Card -->
+                            <div class="row g-2 g-sm-3">
+                                <div class="col-6 col-sm-3">
+                                    <div class="stat-mini-pill">
+                                        <span class="stat-mini-number">6</span>
+                                        <span class="stat-mini-label">Gedung Utama</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <div class="stat-mini-pill">
+                                        <span class="stat-mini-number">18</span>
+                                        <span class="stat-mini-label">Lantai Bangunan</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <div class="stat-mini-pill">
+                                        <span class="stat-mini-number">74+</span>
+                                        <span class="stat-mini-label">Ruang Kelas &amp; Lab</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <div class="stat-mini-pill">
+                                        <span class="stat-mini-number">24+</span>
+                                        <span class="stat-mini-label">Fasilitas Kampus</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sebelah Kanan: 35-40% lebar -->
+                    <div class="col-12 col-lg-5">
+                        <div class="bg-light p-2 rounded-3 border">
+                            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                                <span class="fw-bold small text-dark"><i class="bi bi-geo-alt-fill text-success me-1"></i>Preview Peta Kampus</span>
+                                <button class="btn btn-sm btn-outline-success rounded-pill px-2 py-0" style="font-size: 0.75rem;" onclick="App.navigateTo('map-kampus')">
+                                    Peta Penuh <i class="bi bi-arrow-right ms-1"></i>
+                                </button>
+                            </div>
+                            <div id="home-map-preview" class="rounded-2 border bg-white" style="height: 190px; width: 100%;"></div>
+                            <div class="d-flex align-items-center justify-content-between mt-1 px-1 text-muted" style="font-size: 0.72rem;">
+                                <span>Jl. Raya Lenteng No. 10, Sumenep</span>
+                                <span class="text-success fw-semibold">Desa Batuan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fitur Baru: Rute Singkat ke Lokasi Tujuan (Algoritma Dijkstra) -->
+            <div class="route-preview-card mb-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3 pb-2 border-bottom">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">
+                                <i class="bi bi-signpost-split me-1"></i>Algoritma Dijkstra
+                            </span>
+                            <span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-pill" style="font-size: 0.75rem;">
+                                Shortest Path
+                            </span>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark mb-0">Rute Singkat ke Lokasi Tujuan</h3>
+                        <p class="text-muted small mb-0 mt-1">
+                            Informasi jalur sederhana dari lokasi pengguna menuju gedung atau ruangan yang dipilih berdasarkan jaringan jalan kampus.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline-success btn-sm rounded-pill px-3" onclick="App.navigateTo('map-kampus')">
+                        <i class="bi bi-compass me-1"></i>Buka Peta Kampus
+                    </button>
+                </div>
+
+                <!-- Form Pilihan Titik Keberangkatan & Tujuan -->
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-5">
+                        <label class="form-label small fw-bold text-dark mb-1">
+                            <i class="bi bi-geo-alt-fill text-success me-1"></i>Lokasi Anda:
+                        </label>
+                        <select class="form-select form-select-sm rounded-3 shadow-none" id="home-route-start">
+                            <option value="gerbang_utama" selected>Gerbang Utama (Jl. Raya Lenteng)</option>
+                            <option value="pos_keamanan">Pos Keamanan &amp; Portal Depan</option>
+                            <option value="jalan_masuk">Jalan Masuk Utama Kawasan</option>
+                            <option value="simpang_gor">Simpang GOR &amp; Area Olahraga</option>
+                            <option value="bundaran_monumen">Bundaran Monumen &amp; Plaza Tengah</option>
+                            <option value="simpang_barat">Simpang Koridor Barat (Depan Gd. A &amp; D)</option>
+                            <option value="simpang_utara">Simpang Pedestrian Utara (Depan Gd. C)</option>
+                            <option value="parkir_dosen">Area Parkir Dosen &amp; Karyawan</option>
+                            <option value="parkir_gor">Area Parkir GOR Bahaudin Mudhary</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-5">
+                        <label class="form-label small fw-bold text-dark mb-1">
+                            <i class="bi bi-pin-map-fill text-warning me-1"></i>Tujuan:
+                        </label>
+                        <select class="form-select form-select-sm rounded-3 shadow-none" id="home-route-target">
+                            <optgroup label="Ruangan Kuliah &amp; Laboratorium">
+                                <option value="room-3" selected>Gedung A &bull; Ruang A1.03 (Kelas Eksekutif - Lt 1)</option>
+                                <option value="room-1">Gedung A &bull; Ruang A1.01 (Lobby &amp; Informasi - Lt 1)</option>
+                                <option value="room-7">Gedung A &bull; Ruang A2.01 (Ruang Rektor - Lt 2)</option>
+                                <option value="room-13">Gedung A &bull; Ruang A4.01 (Deramista Executive Hall - Lt 4)</option>
+                                <option value="room-21">Gedung B &bull; Ruang B2.01 (Lab Komputer 1 GIS - Lt 2)</option>
+                                <option value="room-15">Gedung B &bull; Ruang B1.01 (Ruang Dekanat FST - Lt 1)</option>
+                                <option value="room-25">Gedung B &bull; Ruang B3.01 (Ruang Dosen SI &amp; IF - Lt 3)</option>
+                                <option value="room-27">Gedung B &bull; Ruang B4.01 (Lab IoT &amp; Robotika - Lt 4)</option>
+                                <option value="room-29">Gedung C &bull; Ruang C1.01 (Galeri Investasi Bursa Efek - Lt 1)</option>
+                                <option value="room-32">Gedung C &bull; Ruang C2.01 (Lab Akuntansi &amp; Mini Bank - Lt 2)</option>
+                                <option value="room-34">Gedung D &bull; Ruang D1.01 (Perpustakaan Pusat &amp; Digital Library - Lt 1)</option>
+                                <option value="room-36">Gedung D &bull; Ruang D3.01 (Auditorium Megah Tuan Gubhe - Lt 3)</option>
+                                <option value="room-37">Gedung E &bull; Ruang E1.01 (Arena Lapangan GOR - Lt 1)</option>
+                                <option value="room-39">Gedung F &bull; Ruang F1.01 (Panggung Terbuka Pajhur - Lt 1)</option>
+                            </optgroup>
+                            <optgroup label="Gedung &amp; Pintu Masuk">
+                                <option value="akses_gedung_a">Gedung A (Deramista - Rektorat &amp; Administrasi)</option>
+                                <option value="akses_gedung_b">Gedung B (Campaka - Fakultas Sains &amp; Teknologi)</option>
+                                <option value="akses_gedung_c">Gedung C (Kapanjin - Fakultas Ekonomi &amp; Bisnis)</option>
+                                <option value="akses_gedung_d">Gedung D (Tuan Gubhe - Perpustakaan &amp; Auditorium)</option>
+                                <option value="akses_gedung_e">Gedung E (GOR Bahaudin Mudhary)</option>
+                                <option value="akses_gedung_f">Gedung F (Panggung Pajhur)</option>
+                            </optgroup>
+                            <optgroup label="Sarana &amp; Fasilitas Kampus">
+                                <option value="musholla">Musholla Al-Qosos Kampus UNIBA</option>
+                                <option value="kantin">Kantin &amp; Pujasera Mahasiswa</option>
+                                <option value="lab_industri">Laboratorium Teknik Industri</option>
+                                <option value="pkm_koperasi">PKM &amp; Koperasi Mahasiswa</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-2 d-flex align-items-end">
+                        <button class="btn btn-success btn-sm w-100 rounded-3 fw-semibold py-2" id="home-btn-view-route-map">
+                            <i class="bi bi-map-fill me-1"></i>Tampilkan Rute di Peta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Presets Rute Cepat Populer -->
+                <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                    <span class="small text-muted fw-semibold me-1"><i class="bi bi-lightning-charge text-warning"></i>Preset Cepat:</span>
+                    <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill py-1 px-2 small" onclick="HomeRoutePreview.selectPreset('preset-gedung-a')">
+                        Gerbang &rarr; Gedung A
+                    </button>
+                    <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill py-1 px-2 small" onclick="HomeRoutePreview.selectPreset('preset-1')">
+                        Gerbang &rarr; Ruang A1.03
+                    </button>
+                    <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill py-1 px-2 small" onclick="HomeRoutePreview.selectPreset('preset-2')">
+                        Gerbang &rarr; Lab Komputer B2.01
+                    </button>
+                    <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill py-1 px-2 small" onclick="HomeRoutePreview.selectPreset('preset-3')">
+                        Gerbang &rarr; Perpustakaan D1.01
+                    </button>
+                    <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill py-1 px-2 small" onclick="HomeRoutePreview.selectPreset('preset-4')">
+                        Gerbang &rarr; Galeri Investasi C1.01
+                    </button>
+                </div>
+
+                <!-- Output Timeline Step & Metrik Rute (Generated via JS) -->
+                <div id="home-route-result-container">
+                    <!-- Default State diisi oleh HomeRoutePreview.init() -->
+                </div>
+            </div>
+
+            <!-- Footer UNIBA Madura -->
+            <footer class="uniba-footer">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="assets/img/logo_uniba.png" alt="Logo Resmi UNIBA" style="width:36px; height:36px; object-fit: contain;">
+                        <div>
+                            <span class="fw-bold text-dark d-block" style="line-height:1.2;">Universitas Bahaudin Mudhary Madura</span>
+                            <span class="text-muted" style="font-size:0.75rem;">Sistem Informasi Spasial Interaktif Kampus &bull; Skripsi Informatika</span>
+                        </div>
+                    </div>
+                    <div class="text-md-end text-muted small">
+                        <span>Jl. Raya Lenteng No. 10, Batuan, Sumenep, Jawa Timur 69451</span><br>
+                        <span>&copy; 2026 UNIBA Madura. Hak Cipta Dilindungi Undang-Undang.</span>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 2: HALAMAN PETA KAMPUS (FITUR UTAMA)
+             =============================================================== -->
+        <section id="view-map-kampus" class="view-section">
+            <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">Peta Kampus</h2>
+                    <p class="text-muted small mb-0">Klik gedung yang ingin Anda lihat untuk melihat denah dan informasi ruangan.</p>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn btn-outline-success btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalPetaMasterplan">
+                        <i class="bi bi-file-earmark-image me-1"></i>Peta Spasial Asli (Masterplan)
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="MapKampus.resetView()">
+                        <i class="bi bi-arrows-fullscreen me-1"></i>Pusatkan Peta
+                    </button>
+                    <button class="btn btn-success btn-sm rounded-pill px-3" onclick="MapKampus.openQuickRouteModal()">
+                        <i class="bi bi-signpost-split me-1"></i>Cari Rute Kampus
+                    </button>
+                </div>
+            </div>
+
+            <!-- Peta Kampus Grid Layout -->
+            <div class="map-view-wrapper">
+                <!-- Sidebar Daftar Gedung Kampus -->
+                <div class="map-sidebar-panel">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0">Daftar Gedung Kampus</h6>
+                        <span class="badge bg-success-subtle text-success">6 Gedung</span>
+                    </div>
+                    <div class="building-list-scroll" id="map-building-list-container">
+                        <!-- Gedung List Item via JS -->
+                    </div>
+
+                    <!-- Peta Masterplan Spasial Asli Quick Box -->
+                    <div class="pt-2 border-top mt-2">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small fw-bold text-muted text-uppercase" style="font-size: 0.72rem;">Masterplan Kawasan</span>
+                            <span class="badge bg-success-subtle text-success" style="font-size: 0.68rem;">1:1.000</span>
+                        </div>
+                        <div class="p-1 bg-light border rounded-3 text-center">
+                            <img src="assets/img/peta_spasial_uniba.jpeg" alt="Peta Kawasan UNIBA" class="img-fluid rounded border mb-1" style="max-height: 90px; width: 100%; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalPetaMasterplan">
+                            <button class="btn btn-sm btn-outline-success w-100 py-0" style="font-size: 0.72rem;" data-bs-toggle="modal" data-bs-target="#modalPetaMasterplan">
+                                <i class="bi bi-arrows-fullscreen me-1"></i>Lihat Peta Masterplan Asli
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Legenda Peta -->
+                    <div class="pt-2 border-top mt-2">
+                        <h6 class="small fw-bold text-muted text-uppercase mb-2">Legenda Spasial</h6>
+                        <div class="d-flex flex-column gap-1 small text-muted">
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="width:14px; height:14px; border-radius:3px; background:#047857; display:inline-block;"></span>
+                                <span>Batas Area Kawasan Kampus</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="width:14px; height:14px; border-radius:3px; background:#0284c7; display:inline-block;"></span>
+                                <span>Bangunan Gedung Perkuliahan</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="width:14px; height:14px; border-radius:50%; background:#f59e0b; display:inline-block;"></span>
+                                <span>Landmark &amp; Sarana Fasilitas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area Canvas Peta Leaflet -->
+                <div class="map-canvas-container">
+                    <div id="map-kampus-leaflet"></div>
+
+                    <!-- Floating Control Buttons -->
+                    <div class="map-floating-controls">
+                        <button class="btn-map-control" onclick="MapKampus.zoomIn()" title="Perbesar"><i class="bi bi-plus-lg"></i></button>
+                        <button class="btn-map-control" onclick="MapKampus.zoomOut()" title="Perkecil"><i class="bi bi-dash-lg"></i></button>
+                        <button class="btn-map-control" onclick="MapKampus.resetView()" title="Pusatkan"><i class="bi bi-crosshair"></i></button>
+                        <button class="btn-map-control text-success fw-bold" onclick="MapKampus.openQuickRouteModal()" title="Cari Rute Kampus (Dijkstra)"><i class="bi bi-signpost-split-fill"></i></button>
+                    </div>
+
+                    <!-- Floating Route Info Panel (Dijkstra Shortest Path) -->
+                    <div id="map-route-floating-panel" class="map-route-floating-panel d-none"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 3: HALAMAN PETA / DENAH GEDUNG (DENAH LANTAI)
+             =============================================================== -->
+        <section id="view-denah-gedung" class="view-section">
+            <!-- Header Navigasi Denah -->
+            <div class="denah-view-header">
+                <div>
+                    <a href="#map-kampus" class="btn-back-link" onclick="App.navigateTo('map-kampus')">
+                        <i class="bi bi-arrow-left"></i>Kembali ke Peta Kampus
+                    </a>
+                </div>
+                <div class="text-md-center">
+                    <h3 class="fw-bold mb-0 text-dark" id="denah-building-title">Gedung Campaka (Gedung B)</h3>
+                    <span class="text-success fw-semibold small" id="denah-building-subtitle">Fakultas Sains dan Teknologi (FST)</span>
+                </div>
+                <!-- Floor Selector Pills -->
+                <div class="floor-pills-container" id="denah-floor-tabs-container">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- Denah Main Workspace Grid -->
+            <div class="denah-workspace-grid">
+                <!-- SVG Canvas Denah 2D Top-View -->
+                <div class="denah-canvas-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success-subtle text-success px-2 py-1">2D Top-View</span>
+                            <span class="small text-muted">Klik ruangan mana saja untuk melihat detail fasilitas &amp; foto</span>
+                        </div>
+                    </div>
+
+                    <!-- Container Notifikasi Rute Tiba di Ruangan -->
+                    <div id="denah-arrival-banner-container"></div>
+
+                    <div class="denah-svg-wrapper">
+                        <div id="denah-svg-canvas" class="w-100 h-100">
+                            <!-- SVG Rendered Here -->
+                        </div>
+                    </div>
+
+                    <!-- Room Types Legend -->
+                    <div class="denah-legend-bar">
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#e0f2fe; border:1px solid #0284c7;"></span>
+                            <span>Ruang Kelas</span>
+                        </div>
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#ede9fe; border:1px solid #6366f1;"></span>
+                            <span>Ruang Dosen</span>
+                        </div>
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#ccfbf1; border:1px solid #0d9488;"></span>
+                            <span>Laboratorium</span>
+                        </div>
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#fef3c7; border:1px solid #d97706;"></span>
+                            <span>Ruang Administrasi</span>
+                        </div>
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#d1fae5; border:1px solid #059669;"></span>
+                            <span>Fasilitas Umum</span>
+                        </div>
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#ffe4e6; border:1px solid #e11d48;"></span>
+                            <span>Toilet</span>
+                        </div>
+                        <div class="legend-chip">
+                            <span class="legend-color-box" style="background:#e2e8f0; border:1px solid #64748b;"></span>
+                            <span>Tangga/Lift</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Informasi Gedung Samping -->
+                <div class="denah-info-panel" id="denah-building-info-container">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 4: PENCARIAN RUANGAN (HASIL PENCARIAN + LOKASI PETA)
+             =============================================================== -->
+        <section id="view-search" class="view-section">
+            <div class="mb-3">
+                <h2 class="fw-bold text-dark mb-1">Pencarian Ruangan &amp; Fasilitas</h2>
+                <p class="text-muted small">Cari berdasarkan nama ruangan, nomor ruangan, nama gedung, atau fasilitas.</p>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="card p-3 mb-4 border-0 shadow-sm rounded-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-success"></i></span>
+                    <input type="text" id="search-page-input" class="form-control border-start-0 py-2 fs-6" placeholder="Ketik kata kunci: misal 'Laboratorium', 'A1.03', 'Proyektor', 'Campaka'..." onkeydown="if(event.key==='Enter') SearchView.executeSearch(this.value)">
+                    <button class="btn btn-success px-4 fw-bold" onclick="SearchView.executeSearch(document.getElementById('search-page-input').value)">
+                        Cari
+                    </button>
+                </div>
+            </div>
+
+            <!-- Split View: Hasil Sebelah Kiri + Peta Sebelah Kanan -->
+            <div class="search-view-grid">
+                <!-- Sebelah Kiri: Daftar Hasil -->
+                <div class="search-results-panel">
+                    <div class="d-flex justify-content-between align-items-center pb-2 border-bottom">
+                        <h6 class="fw-bold mb-0">Daftar Hasil Pencarian</h6>
+                        <span class="badge bg-success" id="search-results-count">0 Hasil</span>
+                    </div>
+                    <div class="search-cards-scroll" id="search-results-list">
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-search fs-1 mb-2 d-block"></i>
+                            <p class="small mb-0">Masukkan kata kunci di kolom atas untuk mulai mencari.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sebelah Kanan: Peta Lokasi -->
+                <div class="map-canvas-container" style="height: 100%;">
+                    <div id="search-map-leaflet" style="width:100%; height:100%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 5: HALAMAN INFORMASI RUANGAN (KATALOG)
+             =============================================================== -->
+        <section id="view-informasi-ruangan" class="view-section">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">Informasi Ruangan</h2>
+                    <p class="text-muted small mb-0">Katalog seluruh ruangan, spesifikasi kapasitas, dan kelengkapan fasilitas.</p>
+                </div>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-success active" id="btn-view-grid" onclick="CatalogView.setViewMode('grid')" title="Tampilan Card Grid">
+                        <i class="bi bi-grid-fill"></i>
+                    </button>
+                    <button class="btn btn-outline-success" id="btn-view-table" onclick="CatalogView.setViewMode('table')" title="Tampilan Tabel">
+                        <i class="bi bi-table"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="catalog-filter-bar">
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label small fw-bold text-muted">Filter Gedung</label>
+                        <select class="form-select" id="filter-catalog-gedung" onchange="CatalogView.renderRooms()">
+                            <option value="">Semua Gedung</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label small fw-bold text-muted">Filter Tingkat Lantai</label>
+                        <select class="form-select" id="filter-catalog-lantai" onchange="CatalogView.renderRooms()">
+                            <option value="">Semua Lantai</option>
+                            <option value="1">Lantai 1</option>
+                            <option value="2">Lantai 2</option>
+                            <option value="3">Lantai 3</option>
+                            <option value="4">Lantai 4</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label small fw-bold text-muted">Jenis Ruangan</label>
+                        <select class="form-select" id="filter-catalog-jenis" onchange="CatalogView.renderRooms()">
+                            <option value="">Semua Jenis</option>
+                            <option value="Ruang Kelas">Ruang Kelas</option>
+                            <option value="Laboratorium">Laboratorium</option>
+                            <option value="Ruang Dosen">Ruang Dosen</option>
+                            <option value="Ruang Administrasi">Ruang Administrasi</option>
+                            <option value="Fasilitas Umum">Fasilitas Umum</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label small fw-bold text-muted">Cari Nama/Kode</label>
+                        <input type="text" class="form-control" id="filter-catalog-search" placeholder="Cari..." oninput="CatalogView.renderRooms()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid View Containers -->
+            <div class="row g-4" id="catalog-rooms-grid">
+                <!-- Render via JS -->
+            </div>
+
+            <!-- Table View Container -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden d-none" id="catalog-rooms-table">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="text-center" style="width: 50px;">No</th>
+                                <th>Kode</th>
+                                <th>Nama Ruangan</th>
+                                <th>Gedung</th>
+                                <th>Lantai</th>
+                                <th>Kategori</th>
+                                <th>Kapasitas</th>
+                                <th>Fasilitas</th>
+                                <th class="text-end" style="width: 120px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catalog-table-tbody">
+                            <!-- Dinamis via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 6: HALAMAN FASILITAS
+             =============================================================== -->
+        <section id="view-fasilitas" class="view-section">
+            <div class="mb-4">
+                <h2 class="fw-bold text-dark mb-1">Fasilitas Kampus</h2>
+                <p class="text-muted small">Sarana dan prasarana pendukung kegiatan akademik dan kemahasiswaan UNIBA Madura.</p>
+            </div>
+
+            <div class="row g-4" id="facilities-grid-container">
+                <!-- Render via JS -->
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 7: HALAMAN BERITA & PENGUMUMAN
+             =============================================================== -->
+        <section id="view-berita" class="view-section">
+            <div class="mb-4">
+                <h2 class="fw-bold text-dark mb-1">Berita &amp; Pengumuman</h2>
+                <p class="text-muted small">Informasi terkini kegiatan kampus, fasilitas baru, dan perubahan ruangan.</p>
+            </div>
+
+            <div class="row g-4" id="news-grid-container">
+                <!-- Render via JS -->
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 8: LOGIN ADMIN
+             =============================================================== -->
+        <section id="view-admin-login" class="view-section">
+            <div class="admin-login-wrapper">
+                <div class="admin-login-card">
+                    <img src="assets/img/logo_uniba.png" alt="Logo Resmi UNIBA Madura" height="72" class="mb-3" style="object-fit: contain;">
+                    <h4 class="fw-bold text-dark mb-1">Login Admin Sistem</h4>
+                    <p class="text-muted small mb-4">Masuk untuk mengelola data spasial gedung, lantai, dan ruangan.</p>
+
+                    <div id="login-error-alert" class="alert alert-danger py-2 small d-none"></div>
+
+                    <form id="adminLoginForm" onsubmit="event.preventDefault(); const u = document.getElementById('loginUsername').value; const p = document.getElementById('loginPassword').value; AdminApp.handleLogin(u, p);">
+                        <div class="mb-3 text-start">
+                            <label class="form-label small fw-bold text-muted">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-secondary"></i></span>
+                                <input type="text" class="form-control border-start-0" id="loginUsername" placeholder="Masukkan username" required value="admin">
+                            </div>
+                        </div>
+
+                        <div class="mb-4 text-start">
+                            <label class="form-label small fw-bold text-muted">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-secondary"></i></span>
+                                <input type="password" class="form-control border-start-0" id="loginPassword" placeholder="Masukkan password" required value="admin123">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-uniba-cta w-100 py-2 justify-content-center">
+                            <i class="bi bi-box-arrow-in-right"></i>Masuk ke Dashboard
+                        </button>
+                    </form>
+
+                    <div class="mt-4 pt-3 border-top text-muted small">
+                        <span>Akun Demo: <b>admin</b> / <b>admin123</b></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             VIEW 9: DASHBOARD ADMIN
+             =============================================================== -->
+        <section id="view-admin-dashboard" class="view-section">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="assets/img/logo_uniba.png" alt="Logo Resmi UNIBA" style="height: 52px; width: 52px; object-fit: contain;">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-0">Dashboard Administrator</h2>
+                        <span class="small text-muted">Selamat datang, <b id="admin-logged-name">Administrator UNIBA</b></span>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="config/setup_db.php" target="_blank" class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-database me-1"></i>Setup MySQL DB
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="AdminApp.logout()">
+                        <i class="bi bi-box-arrow-right me-1"></i>Keluar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistik Kartu Ringkasan -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="feature-card p-3">
+                        <span class="text-muted small">Total Gedung</span>
+                        <h2 class="fw-bold text-success mb-0" id="stat-total-gedung">6</h2>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="feature-card p-3">
+                        <span class="text-muted small">Total Lantai</span>
+                        <h2 class="fw-bold text-primary mb-0" id="stat-total-lantai">18</h2>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="feature-card p-3">
+                        <span class="text-muted small">Total Ruangan</span>
+                        <h2 class="fw-bold text-warning mb-0" id="stat-total-ruangan">39</h2>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="feature-card p-3">
+                        <span class="text-muted small">Fasilitas Kampus</span>
+                        <h2 class="fw-bold text-info mb-0" id="stat-total-fasilitas">9</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Manajemen Data Admin -->
+            <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+                <ul class="nav admin-nav-tabs gap-2 mb-3">
+                    <li class="nav-item">
+                        <button class="nav-link admin-tab-btn active" data-tab="gedung" onclick="AdminApp.switchTab('gedung')">
+                            <i class="bi bi-building me-1"></i>Kelola Gedung
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link admin-tab-btn" data-tab="ruangan" onclick="AdminApp.switchTab('ruangan')">
+                            <i class="bi bi-door-open me-1"></i>Kelola Ruangan
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link admin-tab-btn" data-tab="fasilitas" onclick="AdminApp.switchTab('fasilitas')">
+                            <i class="bi bi-building-check me-1"></i>Kelola Fasilitas
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link admin-tab-btn" data-tab="berita" onclick="AdminApp.switchTab('berita')">
+                            <i class="bi bi-newspaper me-1"></i>Kelola Berita
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link admin-tab-btn" data-tab="denah" onclick="AdminApp.switchTab('denah')">
+                            <i class="bi bi-diagram-3 me-1"></i>Kelola Denah
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link admin-tab-btn" data-tab="rute" onclick="AdminApp.switchTab('rute')">
+                            <i class="bi bi-signpost-2 me-1"></i>Kelola Jaringan Rute
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- TAB PANE 1: KELOLA GEDUNG -->
+                <div class="admin-tab-pane" id="pane-gedung">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Data Gedung Kampus</h5>
+                        <button class="btn btn-sm btn-success" onclick="AdminApp.openAddGedungModal()">
+                            <i class="bi bi-plus-circle me-1"></i>Tambah Gedung
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light small text-muted">
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Kode</th>
+                                    <th>Nama Gedung</th>
+                                    <th>Kategori</th>
+                                    <th>Jumlah Lantai</th>
+                                    <th>Ruangan</th>
+                                    <th>Warna Peta</th>
+                                    <th class="text-end">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-admin-gedung-tbody">
+                                <!-- Dinamis via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB PANE 2: KELOLA RUANGAN -->
+                <div class="admin-tab-pane d-none" id="pane-ruangan">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Data Ruangan Kampus</h5>
+                        <button class="btn btn-sm btn-success" onclick="AdminApp.openAddRuanganModal()">
+                            <i class="bi bi-plus-circle me-1"></i>Tambah Ruangan
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light small text-muted">
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Kode</th>
+                                    <th>Nama Ruangan</th>
+                                    <th>Gedung</th>
+                                    <th>Lantai</th>
+                                    <th>Jenis</th>
+                                    <th>Kapasitas</th>
+                                    <th>Penanggung Jawab</th>
+                                    <th class="text-end">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-admin-ruangan-tbody">
+                                <!-- Dinamis via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB PANE 3: KELOLA FASILITAS -->
+                <div class="admin-tab-pane d-none" id="pane-fasilitas">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Data Fasilitas Kampus</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light small text-muted">
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Nama Fasilitas</th>
+                                    <th>Kategori</th>
+                                    <th>Lokasi</th>
+                                    <th>Deskripsi</th>
+                                    <th class="text-end">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-admin-fasilitas-tbody">
+                                <!-- Dinamis via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB PANE 4: KELOLA BERITA -->
+                <div class="admin-tab-pane d-none" id="pane-berita">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Pengumuman &amp; Berita Kampus</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light small text-muted">
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Judul Pengumuman</th>
+                                    <th>Kategori</th>
+                                    <th>Tanggal</th>
+                                    <th>Penulis</th>
+                                    <th class="text-end">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-admin-berita-tbody">
+                                <!-- Dinamis via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB PANE 5: KELOLA DENAH -->
+                <div class="admin-tab-pane d-none" id="pane-denah">
+                    <div id="admin-denah-preview-canvas">
+                        <!-- Preview Editor -->
+                    </div>
+                </div>
+
+                <!-- TAB PANE 6: KELOLA JARINGAN RUTE (DIJKSTRA) -->
+                <div class="admin-tab-pane d-none" id="pane-rute">
+                    <!-- Uji & Status Konektivitas Jaringan -->
+                    <div class="card border-0 shadow-xs rounded-3 p-3 bg-light mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-signpost-2-fill text-success me-2"></i>Uji &amp; Validasi Konektivitas Rute Dijkstra</h6>
+                                <p class="text-muted small mb-0">Periksa keterhubungan titik outdoor kampus hingga koridor, tangga, dan ruangan tujuan.</p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-success" onclick="AdminApp.checkNetworkConnectivity()">
+                                    <i class="bi bi-check2-all me-1"></i>Periksa Konektivitas
+                                </button>
+                                <button class="btn btn-sm btn-success" onclick="AdminApp.openAddNodeModal()">
+                                    <i class="bi bi-plus-circle me-1"></i>Tambah Node
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary" onclick="AdminApp.openAddEdgeModal()">
+                                    <i class="bi bi-link-45deg me-1"></i>Tambah Edge
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Form Tester Dijkstra Rute di Admin -->
+                        <div class="row g-2 align-items-end bg-white p-3 rounded-3 border">
+                            <div class="col-12 col-md-4">
+                                <label class="small fw-bold text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>Node Awal:</label>
+                                <select class="form-select form-select-sm" id="adminRuteTestStart"></select>
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <label class="small fw-bold text-muted mb-1"><i class="bi bi-pin-map me-1"></i>Node / Ruangan Tujuan:</label>
+                                <select class="form-select form-select-sm" id="adminRuteTestTarget"></select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <button class="btn btn-sm btn-success w-100 fw-bold" onclick="AdminApp.testAdminDijkstraRoute()">
+                                    <i class="bi bi-play-circle-fill me-1"></i>Hitung Jalur Dijkstra
+                                </button>
+                            </div>
+                        </div>
+                        <div id="adminRuteTestResult" class="mt-2 d-none"></div>
+                    </div>
+
+                    <!-- Split View: Tabel Node & Tabel Edge -->
+                    <div class="row g-3">
+                        <!-- Tabel Node -->
+                        <div class="col-12 col-lg-6">
+                            <div class="border rounded-3 p-3 bg-white h-100 shadow-xs">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-geo-fill text-success me-1"></i>Daftar Node Jalur (<span id="admin-node-count">0</span>)</h6>
+                                    <button class="btn btn-xs btn-outline-success" onclick="AdminApp.openAddNodeModal()">
+                                        <i class="bi bi-plus"></i> Node
+                                    </button>
+                                </div>
+                                <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                                    <table class="table table-sm table-hover align-middle" style="font-size: 0.82rem;">
+                                        <thead class="table-light sticky-top">
+                                            <tr>
+                                                <th>ID / Kode</th>
+                                                <th>Nama Node</th>
+                                                <th>Jenis</th>
+                                                <th>X, Y</th>
+                                                <th class="text-end">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-admin-nodes-tbody">
+                                            <!-- Dinamis via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabel Edge -->
+                        <div class="col-12 col-lg-6">
+                            <div class="border rounded-3 p-3 bg-white h-100 shadow-xs">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-bezier2 text-primary me-1"></i>Daftar Edge Penghubung (<span id="admin-edge-count">0</span>)</h6>
+                                    <button class="btn btn-xs btn-outline-primary" onclick="AdminApp.openAddEdgeModal()">
+                                        <i class="bi bi-plus"></i> Edge
+                                    </button>
+                                </div>
+                                <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                                    <table class="table table-sm table-hover align-middle" style="font-size: 0.82rem;">
+                                        <thead class="table-light sticky-top">
+                                            <tr>
+                                                <th>Dari</th>
+                                                <th>Menuju</th>
+                                                <th>Jarak</th>
+                                                <th>Jalur</th>
+                                                <th class="text-end">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-admin-edges-tbody">
+                                            <!-- Dinamis via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================================================================
+         MODAL DETAIL RUANGAN LENGKAP (INTERAKSI DENAH UTAMA)
+         =================================================================== -->
+    <div class="modal fade uniba-modal" id="roomDetailModal" tabindex="-1" aria-labelledby="roomDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="position-relative">
+                    <img src="assets/img/rooms/kelas_standar.svg" alt="Foto Ruangan" id="modal-room-photo" class="room-detail-hero-img">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 shadow" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                        <div>
+                            <span class="badge bg-light text-dark border px-2 py-1 mb-1" id="modal-room-code">A1.03</span>
+                            <h3 class="fw-bold text-dark mb-0" id="modal-room-name">Ruang Kelas A1.03</h3>
+                            <span class="text-success fw-semibold" id="modal-room-location">Gedung Deramista &mdash; Lantai 1</span>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2" id="modal-room-type">Ruang Kelas</span>
+                    </div>
+
+                    <!-- Kotak Properti Ruangan -->
+                    <div class="row g-3 my-2">
+                        <div class="col-6 col-md-4">
+                            <div class="detail-prop-box">
+                                <span class="prop-label"><i class="bi bi-people me-1"></i>Kapasitas</span>
+                                <span class="prop-value" id="modal-room-capacity">40 Orang</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="detail-prop-box">
+                                <span class="prop-label"><i class="bi bi-person-badge me-1"></i>Penanggung Jawab</span>
+                                <span class="prop-value" id="modal-room-pic">Bapak/Ibu ...</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="detail-prop-box">
+                                <span class="prop-label"><i class="bi bi-clock me-1"></i>Jam Operasional</span>
+                                <span class="prop-value" id="modal-room-hours">07.30 - 17.00 WIB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fasilitas Ruangan -->
+                    <h6 class="fw-bold text-dark mt-3 mb-2">Fasilitas Ruangan</h6>
+                    <div class="row g-2 mb-3" id="modal-room-facilities">
+                        <!-- Chips fasilitas -->
+                    </div>
+
+                    <!-- Deskripsi Ruangan -->
+                    <h6 class="fw-bold text-dark mt-3 mb-1">Deskripsi Ruangan</h6>
+                    <p class="text-muted small" id="modal-room-description">-</p>
+
+                    <!-- Tombol Aksi Sesuai Ketentuan Terintegrasi -->
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-3 flex-wrap gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i>Tutup
+                        </button>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-primary" id="modal-btn-view-map">
+                                <i class="bi bi-geo-alt-fill me-1"></i>Lihat di Peta
+                            </button>
+                            <button type="button" class="btn btn-outline-success" id="modal-btn-view-denah">
+                                <i class="bi bi-diagram-3-fill me-1"></i>Lihat Denah
+                            </button>
+                            <button type="button" class="btn btn-success" id="modal-btn-view-route">
+                                <i class="bi bi-signpost-2-fill me-1"></i>Tampilkan Rute ke Ruangan Ini
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL PETA SPASIAL ASLI KAWASAN KAMPUS UNIBA MADURA (MASTERPLAN)
+         =================================================================== -->
+    <div class="modal fade uniba-modal" id="modalPetaMasterplan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="assets/img/logo_uniba.png" alt="Logo UNIBA" style="width: 34px; height: 34px; object-fit: contain;">
+                        <div>
+                            <h5 class="modal-title fw-bold text-dark mb-0">Peta Kawasan Spasial Universitas Bahaudin Mudhary Madura</h5>
+                            <small class="text-muted">Masterplan Kawasan Kampus &bull; Skala 1:1.000 (Desa Batuan, Kec. Batuan, Sumenep)</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 bg-light">
+                    <div class="text-center bg-white p-2 rounded-3 border mb-3">
+                        <img src="assets/img/peta_spasial_uniba.jpeg" alt="Peta Kawasan Spasial UNIBA Madura" class="img-fluid rounded shadow-sm" style="max-height: 72vh; width: 100%; object-fit: contain;">
+                    </div>
+                    <div class="row g-2 text-dark small bg-white p-3 rounded-3 border">
+                        <div class="col-12 col-md-4">
+                            <span class="text-muted d-block" style="font-size:0.75rem;">Wilayah Administrasi:</span>
+                            <span class="fw-bold">Desa Batuan &amp; Desa Kebonagung, Kec. Batuan</span>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <span class="text-muted d-block" style="font-size:0.75rem;">Skala Kartografi:</span>
+                            <span class="fw-bold">1 : 1.000 (Presisi Spasial Masterplan)</span>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <span class="text-muted d-block" style="font-size:0.75rem;">Sumber Data Primer:</span>
+                            <span class="fw-bold">Rupa Bumi Indonesia 1:25.000 &amp; Citra Satelit SAS Planet 2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2 d-flex justify-content-between align-items-center">
+                    <span class="text-muted small"><i class="bi bi-info-circle me-1"></i>Peta spasial resmi delineasi kawasan kampus UNIBA Madura</span>
+                    <div class="d-flex gap-2">
+                        <a href="assets/img/peta_spasial_uniba.jpeg" target="_blank" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>Buka Gambar Ukuran Penuh
+                        </a>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL DAFTAR RUANGAN GEDUNG & NAVIGASI RUTE (PETA KAMPUS)
+         =================================================================== -->
+    <div class="modal fade uniba-modal" id="modalPilihRuanganGedung" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-bottom">
+                    <div>
+                        <span class="badge bg-success-subtle text-success mb-1" id="modalPilihGedungBadge">Gedung Kampus</span>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="modalPilihGedungTitle">Daftar Ruangan Gedung</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 bg-light p-2 rounded-3 border">
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="small fw-bold text-muted text-nowrap"><i class="bi bi-layers me-1"></i>Filter Lantai:</label>
+                            <select class="form-select form-select-sm" id="modalPilihGedungFilterLantai" onchange="MapKampus.filterBuildingRoomsModal(this.value)">
+                                <option value="">Semua Lantai</option>
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="small fw-bold text-muted text-nowrap"><i class="bi bi-geo-alt me-1"></i>Titik Awal Rute:</label>
+                            <select class="form-select form-select-sm" id="modalPilihGedungStartPoint">
+                                <option value="gerbang_utama">Gerbang Utama (Jl. Raya Lenteng)</option>
+                                <option value="pos_keamanan">Pos Keamanan &amp; Portal Depan</option>
+                                <option value="simpang_bundaran">Bundaran Monumen &amp; Plaza Tengah</option>
+                                <option value="musholla">Musholla Al-Qosos</option>
+                                <option value="kantin">Kantin Kampus</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="modalPilihGedungRoomsList" class="row g-2">
+                        <!-- Dimuat secara dinamis via MapKampus.openBuildingRoomSelector -->
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2 d-flex justify-content-between">
+                    <button class="btn btn-sm btn-outline-success" id="modalPilihGedungBtnOpenDenah" onclick="">
+                        <i class="bi bi-diagram-3-fill me-1"></i>Buka Denah Gedung Ini &rarr;
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL BERITA -->
+    <div class="modal fade uniba-modal" id="newsDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="newsModalTitle">Judul Pengumuman</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-3" id="newsModalDate">Tanggal</p>
+                    <img src="assets/img/campus_hero.jpg" alt="Foto Berita" id="newsModalImg" class="w-100 rounded-3 mb-3" style="max-height:300px; object-fit:cover;">
+                    <p class="text-dark leading-relaxed" id="newsModalContent"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORM GEDUNG (ADMIN) -->
+    <div class="modal fade uniba-modal" id="modalFormGedung" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalGedungTitle">Tambah Gedung</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formGedung" onsubmit="event.preventDefault(); AdminApp.submitGedungForm();">
+                        <input type="hidden" id="formGedungId">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Kode Gedung</label>
+                            <input type="text" class="form-control" id="formGedungKode" placeholder="misal: GD-G" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Nama Gedung</label>
+                            <input type="text" class="form-control" id="formGedungNama" placeholder="Nama Gedung" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Alias / Keterangan</label>
+                            <input type="text" class="form-control" id="formGedungAlias" placeholder="Fakultas / Fungsi Utama">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Jumlah Lantai</label>
+                                <input type="number" class="form-control" id="formGedungLantai" value="4" min="1" max="10">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Warna Peta</label>
+                                <input type="color" class="form-control form-control-color w-100" id="formGedungWarna" value="#059669">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Kategori</label>
+                            <select class="form-select" id="formGedungKategori">
+                                <option value="Akademik">Akademik</option>
+                                <option value="Rektorat & Perkantoran">Rektorat &amp; Perkantoran</option>
+                                <option value="Fakultas & Laboratorium">Fakultas &amp; Laboratorium</option>
+                                <option value="Olahraga & Event">Olahraga &amp; Event</option>
+                                <option value="Fasilitas Umum">Fasilitas Umum</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Foto Gedung</label>
+                            <input type="text" class="form-control" id="formGedungFoto" placeholder="assets/img/buildings/gedung_a.jpg">
+                            <small class="text-muted" style="font-size:0.75rem;">Gunakan path relatif foto lokal (misal: assets/img/buildings/gedung_a.jpg)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Fasilitas Utama Gedung (Pisahkan dengan koma)</label>
+                            <input type="text" class="form-control" id="formGedungFasilitas" placeholder="Lift, Tangga Darurat, Smart Classroom, Ruang Dosen, Toilet">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Deskripsi</label>
+                            <textarea class="form-control" id="formGedungDeskripsi" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Simpan Data Gedung</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORM RUANGAN (ADMIN) -->
+    <div class="modal fade uniba-modal" id="modalFormRuangan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalRuanganTitle">Tambah Ruangan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formRuangan" onsubmit="event.preventDefault(); AdminApp.submitRuanganForm();">
+                        <input type="hidden" id="formRuanganId">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Gedung</label>
+                                <select class="form-select" id="formRuanganGedung" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Lantai</label>
+                                <select class="form-select" id="formRuanganLantai" required>
+                                    <option value="1">Lantai 1</option>
+                                    <option value="2">Lantai 2</option>
+                                    <option value="3">Lantai 3</option>
+                                    <option value="4">Lantai 4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Kode Ruangan</label>
+                                <input type="text" class="form-control" id="formRuanganKode" placeholder="misal: B1.05" required>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold">Nama Ruangan</label>
+                                <input type="text" class="form-control" id="formRuanganNama" placeholder="Nama Ruang Perkuliahan" required>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Jenis Ruangan</label>
+                                <select class="form-select" id="formRuanganJenis">
+                                    <option value="Ruang Kelas">Ruang Kelas</option>
+                                    <option value="Laboratorium">Laboratorium</option>
+                                    <option value="Ruang Dosen">Ruang Dosen</option>
+                                    <option value="Ruang Administrasi">Ruang Administrasi</option>
+                                    <option value="Fasilitas Umum">Fasilitas Umum</option>
+                                    <option value="Toilet">Toilet</option>
+                                    <option value="Tangga/Lift">Tangga/Lift</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Kapasitas (Orang)</label>
+                                <input type="number" class="form-control" id="formRuanganKapasitas" value="40">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Daftar Fasilitas (Pisahkan dengan koma)</label>
+                            <input type="text" class="form-control" id="formRuanganFasilitas" placeholder="AC, Proyektor, Papan Tulis, Meja Kursi, Sound System">
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Penanggung Jawab</label>
+                                <input type="text" class="form-control" id="formRuanganPic" placeholder="Nama Dosen / Staff PIC">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Jam Operasional</label>
+                                <input type="text" class="form-control" id="formRuanganJam" value="07.30 - 17.00 WIB">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Node Akses Rute (ID Node Penghubung Navigasi)</label>
+                            <input type="text" class="form-control" id="formRuanganNodeAkses" placeholder="misal: akses_a_lt1_r103">
+                            <small class="text-muted" style="font-size:0.75rem;">ID node rute titik pintu/akses masuk ruangan ini untuk algoritma Dijkstra.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Deskripsi</label>
+                            <textarea class="form-control" id="formRuanganDeskripsi" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Simpan Data Ruangan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORM NODE RUTE (ADMIN) -->
+    <div class="modal fade uniba-modal" id="modalFormNode" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalNodeTitle">Tambah Node Jaringan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formNode" onsubmit="event.preventDefault(); AdminApp.submitNodeForm();">
+                        <input type="hidden" id="formNodeOriginalId">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">ID Node (Unik)</label>
+                            <input type="text" class="form-control" id="formNodeId" placeholder="misal: gerbang_utama atau simpang_bld_a" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Nama Node / Titik</label>
+                            <input type="text" class="form-control" id="formNodeNama" placeholder="Nama Lokasi / Persimpangan" required>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Jenis Node</label>
+                                <select class="form-select" id="formNodeJenis">
+                                    <option value="outdoor">Jalur Outdoor / Jalan</option>
+                                    <option value="entrance">Pintu Masuk Gedung</option>
+                                    <option value="corridor">Koridor Lantai</option>
+                                    <option value="stairs">Tangga / Lift</option>
+                                    <option value="room_access">Akses Pintu Ruangan</option>
+                                    <option value="facility">Fasilitas Kampus</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Gedung Terkait</label>
+                                <select class="form-select" id="formNodeGedung">
+                                    <option value="">Luar Gedung (Outdoor)</option>
+                                    <option value="1">Gedung A (Deramista)</option>
+                                    <option value="2">Gedung B (Ad-Dhuha)</option>
+                                    <option value="3">Gedung C (Al-Kautsar)</option>
+                                    <option value="4">Gedung D (Al-Fath)</option>
+                                    <option value="5">Gedung E (An-Nur)</option>
+                                    <option value="6">Gedung F (Al-Qalam)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-4">
+                                <label class="form-label small fw-bold">Lantai</label>
+                                <input type="number" class="form-control" id="formNodeLantai" value="1" min="1" max="5">
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label small fw-bold">Koordinat X (px)</label>
+                                <input type="number" class="form-control" id="formNodeX" placeholder="0 - 731" required>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label small fw-bold">Koordinat Y (px)</label>
+                                <input type="number" class="form-control" id="formNodeY" placeholder="0 - 1034" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Simpan Data Node</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORM EDGE RUTE (ADMIN) -->
+    <div class="modal fade uniba-modal" id="modalFormEdge" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalEdgeTitle">Tambah Edge Penghubung</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEdge" onsubmit="event.preventDefault(); AdminApp.submitEdgeForm();">
+                        <input type="hidden" id="formEdgeOriginalId">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Node Awal</label>
+                            <select class="form-select" id="formEdgeNodeAwal" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Node Tujuan</label>
+                            <select class="form-select" id="formEdgeNodeTujuan" required></select>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Jarak / Bobot (meter)</label>
+                                <input type="number" class="form-control" id="formEdgeJarak" step="0.1" min="0.1" value="15" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Jenis Jalur</label>
+                                <select class="form-select" id="formEdgeJenis">
+                                    <option value="pedestrian">Jalur Pejalan Kaki</option>
+                                    <option value="paving">Jalan Paving Kampus</option>
+                                    <option value="corridor">Koridor Gedung</option>
+                                    <option value="stairs">Tangga / Lift</option>
+                                    <option value="entrance">Pintu Masuk</option>
+                                    <option value="room_door">Pintu Ruangan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Simpan Data Edge</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Application Data & Logic Scripts -->
+    <script src="data/uniba_geojson.js"></script>
+    <script src="data/denah_spasial.js"></script>
+    <script src="data/mock_data.js"></script>
+    <script src="assets/js/dijkstra_rute.js"></script>
+    <script src="assets/js/map_kampus.js"></script>
+    <script src="assets/js/map_denah.js"></script>
+    <script src="assets/js/search_view.js"></script>
+    <script src="assets/js/catalog_view.js"></script>
+    <script src="assets/js/admin_app.js"></script>
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>

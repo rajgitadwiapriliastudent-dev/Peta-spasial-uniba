@@ -1,0 +1,1575 @@
+/* ===================================================================
+ * STYLE CSS SISTEM INFORMASI SPASIAL INTERAKTIF UNIBA MADURA
+ * Desain: Modern, Clean, Profesional, Minimalis
+ * Warna Utama: Emerald/Hijau Tua (#064e3b, #047857), Hijau Muda (#10b981, #34d399)
+ * Warna Pendukung: Putih (#ffffff), Cream/Beige Lembut (#faf9f6), Abu-abu (#f1f5f9)
+ * =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --uniba-primary: #047857;
+    --uniba-primary-dark: #064e3b;
+    --uniba-primary-light: #10b981;
+    --uniba-primary-subtle: #ecfdf5;
+    --uniba-accent-mint: #34d399;
+    --uniba-accent-gold: #f59e0b;
+    --uniba-bg-page: #f8fafc;
+    --uniba-bg-card: #ffffff;
+    --uniba-bg-beige: #faf8f5;
+    --uniba-border: #e2e8f0;
+    --uniba-border-light: #f1f5f9;
+    --uniba-text-main: #0f172a;
+    --uniba-text-muted: #64748b;
+    --uniba-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.03);
+    --uniba-shadow-md: 0 6px 18px -2px rgba(6, 78, 59, 0.06), 0 3px 6px -2px rgba(0, 0, 0, 0.03);
+    --uniba-shadow-lg: 0 16px 32px -4px rgba(6, 78, 59, 0.1), 0 6px 12px -3px rgba(0, 0, 0, 0.04);
+    --uniba-radius-sm: 8px;
+    --uniba-radius-md: 14px;
+    --uniba-radius-lg: 20px;
+    --header-height: 72px;
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 80px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--uniba-bg-page);
+    color: var(--uniba-text-main);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* ===================================================================
+   1. HEADER STYLES
+   =================================================================== */
+.uniba-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: #ffffff;
+    border-bottom: 1px solid var(--uniba-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    min-width: 250px;
+}
+
+.header-brand img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-text h1 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--uniba-primary-dark);
+    margin: 0;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.brand-text span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--uniba-text-muted);
+    display: block;
+    line-height: 1.1;
+}
+
+/* Header Global Search */
+.header-search-container {
+    flex: 1;
+    max-width: 480px;
+    margin: 0 2rem;
+    position: relative;
+}
+
+.header-search-input {
+    width: 100%;
+    background-color: #f1f5f9;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 10px 18px 10px 42px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--uniba-text-main);
+    transition: all 0.25s ease;
+}
+
+.header-search-input:focus {
+    background-color: #ffffff;
+    border-color: var(--uniba-primary-light);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    outline: none;
+}
+
+.header-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--uniba-text-muted);
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+/* Header Action Icons */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.btn-header-action {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    color: var(--uniba-text-main);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.btn-header-action:hover {
+    background: var(--uniba-primary-subtle);
+    color: var(--uniba-primary);
+    border-color: var(--uniba-primary-light);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+.user-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--uniba-text-main);
+}
+
+.user-profile-btn:hover {
+    background: var(--uniba-primary-subtle);
+    border-color: var(--uniba-primary-light);
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--uniba-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+/* ===================================================================
+   2. SIDEBAR NAVIGATION
+   =================================================================== */
+.uniba-sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: #ffffff;
+    border-right: 1px solid var(--uniba-border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+    z-index: 1020;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--uniba-text-muted);
+    padding: 0 14px;
+    margin-bottom: 6px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: var(--uniba-radius-md);
+    color: #475569;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.sidebar-link i {
+    font-size: 1.25rem;
+    transition: transform 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: var(--uniba-primary-subtle);
+    color: var(--uniba-primary);
+    transform: translateX(4px);
+}
+
+.sidebar-link.active {
+    background: linear-gradient(135deg, var(--uniba-primary-dark) 0%, var(--uniba-primary) 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+}
+
+.sidebar-link.active i {
+    color: #ffffff;
+}
+
+/* Sidebar Footer (Login Admin) */
+.sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--uniba-border);
+}
+
+.sidebar-admin-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--uniba-radius-md);
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    color: var(--uniba-text-main);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: all 0.2s ease;
+}
+
+.sidebar-admin-link:hover {
+    background: var(--uniba-primary-subtle);
+    border-color: var(--uniba-primary-light);
+    color: var(--uniba-primary-dark);
+}
+
+/* ===================================================================
+   3. MAIN CONTENT CONTAINER
+   =================================================================== */
+.uniba-main-content {
+    margin-top: var(--header-height);
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+    min-height: calc(100vh - var(--header-height));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* View Switcher animations */
+.view-section {
+    display: none;
+    animation: fadeIn 0.28s ease-in-out forwards;
+}
+
+.view-section.active-view {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===================================================================
+   4. HOME / BERANDA VIEW
+   =================================================================== */
+.hero-campus-banner {
+    position: relative;
+    border-radius: var(--uniba-radius-lg);
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    padding: 3.5rem 3rem;
+    color: #ffffff;
+    box-shadow: var(--uniba-shadow-md);
+    margin-bottom: 2.5rem;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(4, 120, 87, 0.82) 55%, rgba(15, 23, 42, 0.75) 100%);
+    backdrop-filter: blur(1.5px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+    letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #e2e8f0;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.btn-uniba-cta {
+    background: #ffffff;
+    color: var(--uniba-primary-dark);
+    font-weight: 700;
+    font-size: 0.98rem;
+    padding: 13px 28px;
+    border-radius: 12px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.btn-uniba-cta:hover {
+    background: #fefce8;
+    color: var(--uniba-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 4 Feature Cards (Compact & Proposional) */
+.feature-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-md);
+    padding: 1.15rem 1.15rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: all 0.22s ease;
+    cursor: pointer;
+    height: 100%;
+    min-height: 155px;
+    max-height: 185px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(4, 120, 87, 0.08);
+    border-color: var(--uniba-primary-light);
+}
+
+.feature-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin-bottom: 0.65rem;
+    background: var(--uniba-primary-subtle);
+    color: var(--uniba-primary);
+    flex-shrink: 0;
+}
+
+.feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--uniba-text-main);
+    margin-bottom: 0.25rem;
+    line-height: 1.25;
+}
+
+.feature-card p {
+    font-size: 0.88rem;
+    color: var(--uniba-text-muted);
+    margin-bottom: 0.5rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.feature-link {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--uniba-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: auto;
+}
+
+/* Tentang Sistem Informasi Spasial (Compact 2 Kolom) */
+.about-spasial-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.5rem; /* 24px */
+    box-shadow: var(--uniba-shadow-sm);
+}
+
+.stat-mini-pill {
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-md);
+    padding: 0.65rem 0.75rem;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.stat-mini-pill:hover {
+    background: var(--uniba-primary-subtle);
+    border-color: var(--uniba-primary-light);
+}
+
+.stat-mini-pill .stat-mini-number {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--uniba-primary);
+    line-height: 1.1;
+    display: block;
+}
+
+.stat-mini-pill .stat-mini-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--uniba-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 3px;
+    display: block;
+}
+
+/* Rute Singkat Preview Card (Home) */
+.route-preview-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--uniba-shadow-sm);
+    transition: all 0.25s ease;
+}
+
+.route-step-badge {
+    background: #f1f5f9;
+    border: 1px solid var(--uniba-border);
+    border-radius: 9999px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--uniba-text-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.route-step-badge.step-start {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+}
+
+.route-step-badge.step-end {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.route-step-arrow {
+    color: var(--uniba-primary);
+    font-weight: 800;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Floating Card Rute di Peta Kampus */
+.map-route-floating-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 480px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-md);
+    padding: 1rem 1.25rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.leaflet-route-polyline {
+    filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.6));
+}
+
+/* Footer UNIBA */
+.uniba-footer {
+    background: #ffffff;
+    border-top: 1px solid var(--uniba-border);
+    padding: 1.5rem 0;
+    margin-top: 2.5rem;
+    font-size: 0.84rem;
+    color: var(--uniba-text-muted);
+}
+
+/* ===================================================================
+   5. SPATIAL MAP VIEW (PETA KAMPUS)
+   =================================================================== */
+.map-view-wrapper {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 1.5rem;
+    height: calc(100vh - var(--header-height) - 4rem);
+    min-height: 600px;
+}
+
+.map-sidebar-panel {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--uniba-shadow-sm);
+    overflow: hidden;
+}
+
+.building-list-scroll {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 4px;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.building-list-item {
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-md);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.building-list-item:hover, .building-list-item.selected {
+    background: var(--uniba-primary-subtle);
+    border-color: var(--uniba-primary);
+    transform: translateX(3px);
+}
+
+.building-item-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.building-item-info h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--uniba-text-main);
+}
+
+.building-item-info span {
+    font-size: 0.78rem;
+    color: var(--uniba-text-muted);
+}
+
+/* Leaflet Map Canvas Container */
+.map-canvas-container {
+    position: relative;
+    border-radius: var(--uniba-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--uniba-shadow-md);
+    border: 1px solid var(--uniba-border);
+    background: #e2e8f0;
+}
+
+#map-kampus-leaflet {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+/* Floating Map Controls */
+.map-floating-controls {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-map-control {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    color: var(--uniba-text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-map-control:hover {
+    background: var(--uniba-primary-subtle);
+    color: var(--uniba-primary);
+    transform: scale(1.05);
+}
+
+/* Leaflet Custom Popup */
+.leaflet-popup-content-wrapper {
+    border-radius: 16px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    line-height: 1.4 !important;
+}
+
+.uniba-map-popup {
+    width: 280px;
+}
+
+.uniba-map-popup img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.uniba-map-popup-body {
+    padding: 14px 16px;
+}
+
+.uniba-map-popup h5 {
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--uniba-text-main);
+}
+
+.uniba-map-popup p {
+    font-size: 0.8rem;
+    color: var(--uniba-text-muted);
+    margin-bottom: 12px;
+}
+
+.btn-popup-denah {
+    background: var(--uniba-primary);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn-popup-denah:hover {
+    background: var(--uniba-primary-dark);
+    color: #ffffff;
+}
+
+/* ===================================================================
+   6. FLOOR PLAN VIEW (PETA / DENAH GEDUNG)
+   =================================================================== */
+.denah-view-header {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.25rem 1.75rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: var(--uniba-shadow-sm);
+}
+
+.btn-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--uniba-primary);
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: var(--uniba-primary-subtle);
+    transition: all 0.2s;
+}
+
+.btn-back-link:hover {
+    background: var(--uniba-primary);
+    color: #ffffff;
+}
+
+/* Floor Selector Tabs */
+.floor-pills-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 6px;
+    border-radius: 14px;
+}
+
+.btn-floor-pill {
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: none;
+    background: transparent;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-floor-pill:hover {
+    color: var(--uniba-primary);
+}
+
+.btn-floor-pill.active {
+    background: #ffffff;
+    color: var(--uniba-primary-dark);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Denah Layout Main Grid */
+.denah-workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.denah-canvas-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--uniba-shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.denah-svg-wrapper {
+    background: #fdfbf7;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-md);
+    overflow: hidden;
+    position: relative;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Interactive SVG Room Elements */
+.room-polygon {
+    cursor: pointer;
+    transition: all 0.25s ease;
+    stroke-width: 2px;
+}
+
+.room-polygon:hover {
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
+    stroke-width: 3.5px !important;
+}
+
+.room-polygon.active-selected {
+    stroke: #047857 !important;
+    stroke-width: 4px !important;
+    filter: drop-shadow(0 0 12px rgba(4, 120, 87, 0.5));
+    animation: roomPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes roomPulse {
+    0%, 100% { stroke-width: 3.5px; }
+    50% { stroke-width: 5px; stroke: #10b981; }
+}
+
+.room-label-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    pointer-events: none;
+    fill: #1e293b;
+    text-anchor: middle;
+}
+
+.room-code-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 9.5px;
+    font-weight: 800;
+    pointer-events: none;
+    fill: #047857;
+    text-anchor: middle;
+}
+
+/* Denah Room Legend */
+.denah-legend-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--uniba-border);
+}
+
+.legend-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--uniba-text-muted);
+}
+
+.legend-color-box {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+}
+
+/* Denah Side Information Panel */
+.denah-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.building-summary-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--uniba-shadow-sm);
+}
+
+.building-summary-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.building-summary-body {
+    padding: 1.5rem;
+}
+
+.floor-rooms-list-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--uniba-shadow-sm);
+    max-height: 440px;
+    display: flex;
+    flex-direction: column;
+}
+
+.room-items-container {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1rem;
+    padding-right: 4px;
+}
+
+.floor-room-item {
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.floor-room-item:hover, .floor-room-item.selected {
+    background: var(--uniba-primary-subtle);
+    border-color: var(--uniba-primary);
+}
+
+/* ===================================================================
+   7. ROOM DETAIL MODAL / SLIDE PANEL
+   =================================================================== */
+.uniba-modal .modal-content {
+    border-radius: var(--uniba-radius-lg);
+    border: none;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.room-detail-hero-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.detail-badge-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 1rem 0;
+}
+
+.detail-prop-box {
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.detail-prop-box .prop-label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--uniba-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+}
+
+.detail-prop-box .prop-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--uniba-text-main);
+}
+
+/* ===================================================================
+   8. SEARCH VIEW (SPLIT LAYOUT)
+   =================================================================== */
+.search-view-grid {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 1.5rem;
+    height: calc(100vh - var(--header-height) - 4rem);
+    min-height: 600px;
+}
+
+.search-results-panel {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--uniba-shadow-sm);
+    overflow: hidden;
+}
+
+.search-cards-scroll {
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 1rem;
+    padding-right: 4px;
+}
+
+.search-result-card {
+    background: #f8fafc;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-md);
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    gap: 14px;
+}
+
+.search-result-card:hover, .search-result-card.active {
+    background: #ffffff;
+    border-color: var(--uniba-primary);
+    box-shadow: var(--uniba-shadow-md);
+    transform: translateY(-2px);
+}
+
+.search-result-card img {
+    width: 85px;
+    height: 85px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.search-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-card-info h5 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: var(--uniba-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-card-location {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--uniba-primary);
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* ===================================================================
+   9. CATALOG & FACILITIES VIEW
+   =================================================================== */
+.catalog-filter-bar {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    box-shadow: var(--uniba-shadow-sm);
+}
+
+.room-grid-card {
+    background: #ffffff;
+    border: 1px solid var(--uniba-border);
+    border-radius: var(--uniba-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--uniba-shadow-sm);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.room-grid-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--uniba-shadow-lg);
+    border-color: var(--uniba-primary-light);
+}
+
+.room-grid-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.room-grid-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* ===================================================================
+   10. ADMIN DASHBOARD & LOGIN
+   =================================================================== */
+.admin-login-wrapper {
+    min-height: calc(100vh - var(--header-height) - 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-login-card {
+    background: #ffffff;
+    border-radius: var(--uniba-radius-lg);
+    border: 1px solid var(--uniba-border);
+    box-shadow: var(--uniba-shadow-lg);
+    max-width: 440px;
+    width: 100%;
+    padding: 2.5rem;
+    text-align: center;
+}
+
+.admin-nav-tabs .nav-link {
+    font-weight: 600;
+    color: var(--uniba-text-muted);
+    border-radius: 10px;
+    padding: 10px 18px;
+    border: 1px solid transparent;
+}
+
+.admin-nav-tabs .nav-link.active {
+    background: var(--uniba-primary);
+    color: #ffffff;
+}
+
+/* ===================================================================
+   11. RESPONSIVE DESIGN (Desktop, Tablet, Mobile)
+   =================================================================== */
+
+/* Tablet (max 991px) */
+@media (max-width: 991.98px) {
+    :root {
+        --sidebar-width: 80px;
+    }
+
+    .uniba-sidebar {
+        width: var(--sidebar-collapsed-width);
+        padding: 1.25rem 0.5rem;
+    }
+
+    .sidebar-label, .sidebar-link span, .sidebar-admin-link span {
+        display: none;
+    }
+
+    .sidebar-link, .sidebar-admin-link {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    .uniba-main-content {
+        margin-left: var(--sidebar-collapsed-width);
+        padding: 1.5rem;
+    }
+
+    .map-view-wrapper, .search-view-grid, .denah-workspace-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .map-canvas-container, #map-kampus-leaflet {
+        min-height: 480px;
+    }
+}
+
+/* Mobile (max 767px) */
+@media (max-width: 767.98px) {
+    :root {
+        --header-height: 64px;
+        --sidebar-width: 280px;
+    }
+
+    .header-brand .brand-text {
+        display: none;
+    }
+
+    .header-search-container {
+        display: none; /* Accessible via dedicated search page on mobile */
+    }
+
+    .uniba-sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        bottom: 0;
+        width: 280px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        padding: 2rem 1.25rem;
+    }
+
+    .uniba-sidebar.mobile-open {
+        left: 0;
+    }
+
+    .sidebar-label, .sidebar-link span, .sidebar-admin-link span {
+        display: inline-block;
+    }
+
+    .sidebar-link, .sidebar-admin-link {
+        justify-content: flex-start;
+        padding: 12px 16px;
+    }
+
+    .uniba-main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .hero-campus-banner {
+        padding: 2rem 1.5rem;
+        min-height: 340px;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .denah-svg-wrapper {
+        min-height: 350px;
+    }
+}
+
+/* ===================================================================
+   14. POP-UP SPASIAL GEDUNG & NAVIGASI DIJKSTRA (REVISI SKRIPSI GITA)
+   =================================================================== */
+
+/* Leaflet Popup Custom Container */
+.leaflet-popup-content-wrapper {
+    padding: 0 !important;
+    border-radius: var(--uniba-radius-md) !important;
+    box-shadow: 0 12px 32px rgba(6, 78, 59, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(4, 120, 87, 0.15);
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    line-height: 1.5;
+}
+
+.leaflet-popup-tip {
+    background: #ffffff !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Kartu Pop-up Gedung Sesuai Ketentuan Bagian 3 */
+.uniba-building-card-popup {
+    width: 290px;
+    max-width: 310px;
+    background: #ffffff;
+    font-family: inherit;
+    border-radius: var(--uniba-radius-md);
+}
+
+.uniba-popup-photo-wrap {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    background: #f1f5f9;
+    overflow: hidden;
+}
+
+.uniba-popup-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.uniba-building-card-popup:hover .uniba-popup-photo {
+    transform: scale(1.03);
+}
+
+.uniba-popup-badge-cat {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    background: rgba(6, 78, 59, 0.88);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.uniba-popup-close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.2s ease;
+    z-index: 10;
+}
+
+.uniba-popup-close-btn:hover {
+    background: rgba(220, 38, 38, 0.9);
+}
+
+.uniba-popup-body {
+    padding: 12px 14px 14px 14px;
+}
+
+.uniba-popup-title {
+    font-size: 0.96rem;
+    font-weight: 800;
+    color: var(--uniba-primary-dark);
+    margin: 0 0 4px 0;
+    line-height: 1.25;
+}
+
+.uniba-popup-desc {
+    font-size: 0.74rem;
+    color: var(--uniba-text-muted);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.uniba-popup-props {
+    display: flex;
+    gap: 12px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: #334155;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 5px 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.uniba-popup-facilities {
+    font-size: 0.72rem;
+    color: #475569;
+    margin-bottom: 10px;
+    line-height: 1.35;
+}
+
+.uniba-popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 8px;
+}
+
+.uniba-popup-actions .btn {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+    border-radius: 8px;
+}
+
+/* Bottom Sheet Mobile saat Gedung Diklik */
+.uniba-mobile-bld-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+    padding: 1rem 1.25rem 1.25rem 1.25rem;
+    z-index: 2050;
+    transform: translateY(105%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.uniba-mobile-bld-sheet.show {
+    transform: translateY(0);
+}
+
+.mobile-sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sheet-drag-handle {
+    width: 40px;
+    height: 4px;
+    background: #cbd5e1;
+    border-radius: 999px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Floating Navigation Info Panel (Dijkstra Shortest Path Result) */
+.map-route-floating-panel {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 370px;
+    max-width: calc(100% - 32px);
+    max-height: calc(100% - 32px);
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--uniba-radius-md);
+    box-shadow: 0 14px 35px -5px rgba(6, 78, 59, 0.22), 0 5px 15px rgba(0, 0, 0, 0.08);
+    border: 1.5px solid rgba(16, 185, 129, 0.35);
+    padding: 1rem;
+    z-index: 1000;
+}
+
+/* Route Badges & Steps */
+.route-step-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: #f1f5f9;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.route-step-badge.step-start {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.route-step-badge.step-end {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    font-weight: 700;
+}
+
+.route-step-arrow {
+    color: #94a3b8;
+    font-weight: bold;
+    font-size: 0.75rem;
+}
+
+/* Label Gedung di Atas Peta Kampus */
+.uniba-map-building-tag {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1.5px solid #047857;
+    color: #064e3b;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    pointer-events: none;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Animasi Pulse Pin Rute Awal & Akhir */
+@keyframes pinPulse {
+    0% { transform: scale(0.95); opacity: 0.9; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.9; }
+}
+
+.route-pulse-pin {
+    animation: pinPulse 2s infinite ease-in-out;
+}
+

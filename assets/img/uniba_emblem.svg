@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <linearGradient id="emblemGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#065f46" />
+      <stop offset="50%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+    <linearGradient id="emblemGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <circle cx="40" cy="40" r="39" fill="url(#emblemGold)" />
+  <circle cx="40" cy="40" r="35" fill="url(#emblemGreen)" />
+  <circle cx="40" cy="40" r="32" fill="none" stroke="#fef3c7" stroke-width="1.2" stroke-dasharray="3,2" />
+  <path d="M 40 18 Q 58 22 58 38 Q 58 56 40 64 Q 22 56 22 38 Q 22 22 40 18 Z" fill="#ffffff" />
+  <path d="M 40 24 L 44 32 L 36 32 Z" fill="#d97706" />
+  <path d="M 37 32 H 43 V 45 H 37 Z" fill="#047857" />
+  <path d="M 30 46 Q 40 43 40 48 Q 40 43 50 46 L 49 53 Q 40 50 40 54 Q 40 50 31 53 Z" fill="#065f46" />
+  <path d="M 25 36 Q 28 32 34 35 Q 29 40 25 36 Z" fill="#f59e0b" />
+  <path d="M 55 36 Q 52 32 46 35 Q 51 40 55 36 Z" fill="#f59e0b" />
+  <path d="M 24 43 Q 29 40 33 44 Q 28 47 24 43 Z" fill="#f59e0b" />
+  <path d="M 56 43 Q 51 40 47 44 Q 52 47 56 43 Z" fill="#f59e0b" />
+  <polygon points="40,11 41.5,14.5 45,14.5 42,16.5 43.5,20 40,17.5 36.5,20 38,16.5 35,14.5 38.5,14.5" fill="#f59e0b" />
+</svg>
